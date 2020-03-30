@@ -1,0 +1,9 @@
+import React from 'react'
+import './Button.css'
+const Button = ( { vieillir } ) => (
+    <button onClick={ vieillir } >
+        Vieillir avec 2 ans
+    </button>
+)
+
+export default Button
