@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
-import logo from './logo.svg';
 import './App.css';
 import Member from './components/Member'
 import Button from './components/Button'
+import uniqid from 'uniqid';
 
 const famille = {
   member1: {
@@ -24,7 +24,10 @@ const famille = {
 }
 //Componont stytLess
 class App extends Component {
-  state = { famille }
+  state = { 
+    famille,
+    isShow: false
+  }
   handleClick = num => {
       console.log('click')
       //on peux pas mettre a jour le state directement
@@ -32,54 +35,76 @@ class App extends Component {
 
       //Etapes a suivre :
       //prendre une copie de l'objet famille de state
-      const famille = { ... this.state.famille }
+      const famille = { ...this.state.famille }
       famille.member1.age += num
       this.setState({ famille })
   }
 
-  handleChangeName = event => {
-    const famille = { ... this.state.famille }
+  handleChangeName = (event, memberId) => {
+    const famille = { ...this.state.famille }
     const nom = event.target.value
-    console.log(nom)
-    famille.member4.nom = nom;
+    famille[memberId].nom = nom;
     this.setState({ famille })
   }
 
-  handleChangeAge = event => {
-    const famille = { ... this.state.famille }
+  cacherNom = (id) => {
+    const famille = { ...this.state.famille }
+    famille[id].nom = 'x'
+    this.setState({ famille })
+  }
+
+  handleChangeAge = (event, memberId) => {
+    const famille = { ...this.state.famille }
     const age = event.target.value
-    famille.member4.age = age
+    famille[memberId].age = age
     this.setState( { famille } )
+  }
+
+  handleShowDescription = event => {
+    const isShow = !this.state.isShow
+    console.log(isShow)
+    this.setState({ isShow })
   }
 
   render (){
     const { title } = this.props;
-    const { famille } = this.state
+    const { famille, isShow } = this.state
+
+    let description = null
+
+    if(isShow) {
+        // les parentaises sont obligé dans le cas de plusieurs lignes
+        description = (
+          <strong style={{display : 'block', marginBottom:'10px'}}>je suis visible</strong>
+        )
+    }
+
+    
+    const liste = Object.keys(famille)
+      .map(membre => (
+          <Member 
+          key={membre}
+          cacherNom={() => this.cacherNom(membre)}
+          handleChangeName={event => this.handleChangeName(event, membre)}
+          handleChangeAge={event => this.handleChangeAge(event, membre)}
+          age={famille[membre].age}
+          nom={famille[membre].nom} />
+        )
+      )
     return (
       <div className="App">
         <h1>{ title }</h1>
-        <input value={ famille.member4.nom } onChange={ this.handleChangeName } type="text" />
-        <br/><br/>
-        <input value={ famille.member4.age } onChange={ this.handleChangeAge } type="number" />
-        <br/>
-        <Member 
+        
+        {/*<Member 
           age={famille.member1.age}
           nom={famille.member1.nom} 
         >
-          <strong>Je suis un humain</strong>
-        </Member>
-        <Member 
-          age={famille.member2.age}
-          nom={famille.member2.nom} 
-        />
-        <Member 
-          age={famille.member3.age}
-          nom={famille.member3.nom} 
-        />
-        <Member 
-          age={famille.member4.age}
-          nom={famille.member4.nom} 
-        />
+          { description }
+          <button onClick={this.handleShowDescription}>
+            { isShow ? 'Cacher' : 'Montrer'}
+          </button>
+        </Member>*/}
+        { liste }
         <Button 
           vieillir={ () => this.handleClick(2) }
         />
