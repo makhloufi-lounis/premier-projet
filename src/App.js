@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import './App.css';
 import Member from './components/Member'
 import Button from './components/Button'
-import uniqid from 'uniqid';
+//import uniqid from 'uniqid';
 
 const famille = {
   member1: {
