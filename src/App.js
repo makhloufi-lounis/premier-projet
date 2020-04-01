@@ -95,7 +95,7 @@ class App extends Component {
       <div className="App">
         <h1>{ title }</h1>
         
-        {/*<Member 
+        {<Member 
           age={famille.member1.age}
           nom={famille.member1.nom} 
         >
@@ -103,7 +103,7 @@ class App extends Component {
           <button onClick={this.handleShowDescription}>
             { isShow ? 'Cacher' : 'Montrer'}
           </button>
-        </Member>*/}
+        </Member>}
         { liste }
         <Button 
           vieillir={ () => this.handleClick(2) }
